@@ -192,29 +192,30 @@ System:
 
 ### 1. Clone the repository
 
-https://github.com/muthuprakash23/foodShield-ai-refund-fraud-detector.git
+```bash
+git clone https://github.com/muthuprakash23/foodShield-ai-refund-fraud-detector.git
+cd foodShield-ai-refund-fraud-detector
+```
 
+### 2. Create a virtual environment
 
-### 2. Create virtual environment
-
-
+```bash
 python -m venv .venv
+```
 
-
-### 3. Activate virtual environment
+### 3. Activate the virtual environment
 
 For Windows PowerShell:
 
-
+```powershell
 .\.venv\Scripts\Activate.ps1
-
+```
 
 ### 4. Install dependencies
 
+```bash
 pip install -r requirements.txt
-
-
----
+```
 
 ## Environment Variables
 
@@ -224,50 +225,54 @@ Create a `.env` file in the project root.
 GROQ_API_KEY=your_groq_api_key
 GEMINI_API_KEY=your_gemini_api_key
 ```
----
+
+The `.env` file is ignored using `.gitignore` and should not be committed.
 
 ## Database Setup
 
-Run the seed file to create sample users, orders, and refund history.
+A sample SQLite database is included for demo/testing. To regenerate the database, run:
 
-
-python seed.py
-
-
-This creates a local SQLite database for demo/testing.
-
----
+```bash
+python database/seed.py
+```
 
 ## Run the Application
 
-
+```bash
 streamlit run main.py
+```
 
-
-Then open the Streamlit URL shown in the terminal.
 
 ---
 
-## Project Structure
+## System Architecture
 
-
-foodshield-ai-refund-fraud-detector/
-├── agents/
-│   ├── intake_agent.py
-│   ├── vision_agent.py
-│   └── decision_agent.py
-├── tools/
-│   ├── db_tool.py
-│   └── hf_detector_tool.py
-├── database/
-│   └── fraud_detector.db
-├── graph.py
-├── main.py
-├── seed.py
-├── state.py
-├── requirements.txt
-├── README.md
-└── .gitignore
+```text
+User Complaint + Order ID
+        ↓
+Intake Agent
+        ├── Understands complaint
+        ├── Asks follow-up questions
+        └── Collects issue, food item, and photo
+        ↓
+Database Tool
+        ├── Fetches order details
+        └── Fetches refund history
+        ↓
+Vision Agent
+        ├── Uses Gemini Vision to analyze uploaded food image
+        ├── Checks whether the claimed issue is visible
+        └── Checks whether the food matches the complaint
+        ↓
+Hugging Face AI Image Detector
+        └── Estimates whether the image may be AI-generated or manipulated
+        ↓
+Decision Agent
+        ├── Combines claim, image evidence, manipulation risk, and refund history
+        └── Produces final decision
+        ↓
+APPROVE / REJECT / ESCALATE / ASK_MORE_EVIDENCE
+```
 
 
 ---
@@ -293,12 +298,6 @@ This makes the system explainable, modular, and closer to real-world AI workflow
 * The SQLite database is used for demo purposes.
 * The current version is a prototype and not a production fraud detection system.
 * Human review is recommended for uncertain or high-risk cases.
-
----
-
-## Resume Description
-
-Built an agentic AI food refund risk analysis system that uses LLM/VLM agents to extract complaint claims, verify uploaded food images, estimate AI-manipulation risk, analyze customer refund history, and route refund requests to approve, reject, or escalate decisions.
 
 ---
 
