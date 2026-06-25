@@ -1,0 +1,15 @@
+langgraph
+langchain
+langchain-groq
+langchain-google-genai
+langchain-community
+pillow
+requests
+python-dotenv
+streamlit
+sqlalchemy
+pydantic
+httpx
+tenacity
+transformers
+torch
